@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"MainApp","l":"Admin"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"MainApp","l":"ClimateAction"},{"p":"MainApp","l":"LoginFrame"},{"p":"MainApp","l":"MainApplication"},{"p":"MainApp","l":"NormalUser"},{"p":"MainApp","l":"SignupFrame"},{"p":"MainApp","l":"User"}];updateSearchResults();

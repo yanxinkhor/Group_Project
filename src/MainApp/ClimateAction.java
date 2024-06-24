@@ -23,7 +23,7 @@ public class ClimateAction {
         sidebtn.setLayout(new GridLayout(0, 1));
         sidebtn.setPreferredSize(new Dimension(180,0));
         
-        imageIcon = new ImageIcon(getClass().getResource("/Images/SDG13.1.gif"));
+        imageIcon = new ImageIcon(getClass().getResource("/Images/SDG_13.jpg"));
         
         imageLabel = new JLabel(imageIcon);
         frame.add(imageLabel, BorderLayout.CENTER);

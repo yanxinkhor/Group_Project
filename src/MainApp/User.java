@@ -4,12 +4,12 @@ public class User {
 
     private String username;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String gender;
     private String password;
     private boolean isAdmin;
 
-    public User(String username, String email, int phoneNumber, String password) {
+    public User(String username, String email, String phoneNumber, String password) {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -26,7 +26,7 @@ public class User {
         return email;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

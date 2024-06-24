@@ -21,7 +21,6 @@ public class LoginFrame implements ActionListener {
     JPanel panel;
     JRadioButton AdminBtn;
     JRadioButton UserBtn;
-    
 
     public LoginFrame(ArrayList<User> users) {
 
@@ -44,37 +43,39 @@ public class LoginFrame implements ActionListener {
         panel.setBounds(0, 0, 300, 400);
 
         usernameLabel.setBounds(350, 100, 75, 25);
+        frame.add(usernameLabel);
+        
         passwordLabel.setBounds(350, 150, 75, 25);
+        frame.add(passwordLabel);
         
         messageLabel.setBounds(70, 50, 350, 25);
         messageLabel.setFont(new Font("Poppins", Font.BOLD, 30));
         messageLabel.setForeground(Color.WHITE);
+        frame.add(messageLabel);
 
         username.setBounds(425, 100, 200, 25);
         password.setBounds(425, 150, 200, 25);
+        frame.add(password);
 
         AdminBtn.setBounds(425, 180, 100, 25);
         UserBtn.setBounds(525, 180, 150, 25);
         ButtonGroup group = new ButtonGroup();
         group.add(AdminBtn);
         group.add(UserBtn);
+        frame.add(AdminBtn);
+        frame.add(UserBtn);
 
         LoginBtn.setBounds(420, 220, 100, 25);
         LoginBtn.addActionListener(this);
+        frame.add(LoginBtn);
 
         SignupBtn.setBounds(525, 220, 100, 25);
         SignupBtn.addActionListener(this);
-        
-        frame.add(messageLabel);
-        frame.add(usernameLabel);
-        frame.add(username);
-        frame.add(passwordLabel);
-        frame.add(password);
-        frame.add(AdminBtn);
-        frame.add(UserBtn);
-        frame.add(LoginBtn);
         frame.add(SignupBtn);
         
+       
+        
+        frame.add(username);
         frame.add(panel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

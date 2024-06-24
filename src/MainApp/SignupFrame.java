@@ -93,7 +93,7 @@ public class SignupFrame implements ActionListener {
 
                 if (!userExists) {
                     JOptionPane.showMessageDialog(null, "Sign Up Successfully");
-                    users.add(new User(username, email, Integer.parseInt(phoneNumber), password));
+                    users.add(new User(username, email, phoneNumber, password));
                     frame.dispose();
                     new LoginFrame(users);
                 }

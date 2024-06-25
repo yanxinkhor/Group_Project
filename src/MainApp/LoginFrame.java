@@ -34,7 +34,6 @@ public class LoginFrame implements ActionListener {
         usernameLabel = new JLabel("Username:");
         passwordLabel = new JLabel("Password:");
         messageLabel = new JLabel("WELCOME");
-
         panel = new JPanel();
         AdminBtn = new JRadioButton("Admin");
         UserBtn = new JRadioButton("Normal User");
@@ -73,8 +72,7 @@ public class LoginFrame implements ActionListener {
         SignupBtn.addActionListener(this);
         frame.add(SignupBtn);
         
-       
-        
+      
         frame.add(username);
         frame.add(panel);
 
@@ -89,6 +87,11 @@ public class LoginFrame implements ActionListener {
         if (e.getSource() == LoginBtn) {
             String usernameField = username.getText();
             String passwordField = String.valueOf(password.getPassword());
+            
+            if(!AdminBtn.isSelected() && !UserBtn.isSelected()){
+                JOptionPane.showMessageDialog(frame, "Please select Admin or User");
+                return;
+            }
 
             if (usernameField.isEmpty() || passwordField.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Please enter your credential.");
@@ -113,7 +116,6 @@ public class LoginFrame implements ActionListener {
         } else if (e.getSource() == SignupBtn) {
             new SignupFrame(users);
             frame.setVisible(false);
-
         }
     }
 

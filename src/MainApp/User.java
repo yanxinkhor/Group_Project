@@ -9,7 +9,7 @@ public class User {
     private String password;
     private boolean isAdmin;
 
-    public User(String username, String email, String phoneNumber, String password) {
+    public User(String username, String email, String phoneNumber, String password, boolean isAdmin) {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -41,4 +41,6 @@ public class User {
     public String gender(){
         return gender;
     }
+    
+    
 }

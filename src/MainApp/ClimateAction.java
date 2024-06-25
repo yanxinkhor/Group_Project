@@ -2,6 +2,8 @@ package MainApp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ClimateAction {
 
@@ -46,4 +48,23 @@ public class ClimateAction {
         frame.add(sidebtn, BorderLayout.WEST);
         
     }
+    
+      private class ButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton source = (JButton) e.getSource();
+            String text = source.getText();
+            switch (text) {
+                case "VIEW":
+                    imageLabel.setVisible(false);
+                    break;
+                // Add cases for other buttons as needed
+                default:
+                    // Handle other buttons
+                    break;
+            }
+        }
+    }
 }
+
+

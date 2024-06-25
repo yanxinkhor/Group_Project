@@ -105,14 +105,14 @@ public class LoginFrame implements ActionListener {
                     if(AdminBtn.isSelected()&& user.isAdmin()){
                       found = true;
                       JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
-                      new ClimateAction(true);
-                      frame.setVisible(false);
+                      new ClimateAction(true,users);
+                      frame.dispose();
                       break;
                     }else if(UserBtn.isSelected()&& !user.isAdmin()){
                        found = true;
                        JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
-                       new ClimateAction(false);
-                       frame.setVisible(false);
+                       new ClimateAction(false,users);
+                       frame.dispose();
                        break;
                     }else {
                         JOptionPane.showMessageDialog(null, "Invalid login: Role mismatch");
@@ -126,7 +126,7 @@ public class LoginFrame implements ActionListener {
             }
         } else if (e.getSource() == SignupBtn) {
             new SignupFrame(users);
-            frame.setVisible(false);
+            frame.dispose();
         }
     }
 

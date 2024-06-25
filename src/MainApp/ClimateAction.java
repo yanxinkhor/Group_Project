@@ -2,6 +2,7 @@ package MainApp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,9 +12,11 @@ public class ClimateAction {
     JPanel sidebtn;
     ImageIcon imageIcon;
     JLabel imageLabel;
-    
+    ArrayList<User> users;
 
-    public ClimateAction(boolean isAdmin) {
+    public ClimateAction(boolean isAdmin, ArrayList<User> users) {
+        this.users = users;
+        
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(700, 450);
@@ -49,6 +52,7 @@ public class ClimateAction {
             button.setBackground(new Color(0x2E2B5F));
             button.setFocusPainted(false);
             button.setBorderPainted(false);
+            button.addActionListener(new ButtonAction());
             sidebtn.add(button);
         }
         
@@ -56,18 +60,34 @@ public class ClimateAction {
         
     }
     
-      private class ButtonClickListener implements ActionListener {
-        @Override
+      private class ButtonAction implements ActionListener {
+        
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
             String text = source.getText();
             switch (text) {
+                case "SEARCH":
+                    break;
                 case "VIEW":
                     imageLabel.setVisible(false);
                     break;
-                // Add cases for other buttons as needed
+                case "ADD ACTION":
+                    break;
+                case "DELETE ACTION":
+                    break;
+                case "UPDATE ACTION":
+                    break;
+                case "REAL-TIME DATA":
+                    break;
+                case "PROFILE":
+                    break;
+                case "LOGOUT":
+                   frame.dispose();
+                   new LoginFrame(users);
+                   break;
+
                 default:
-                    // Handle other buttons
+                    
                     break;
             }
         }

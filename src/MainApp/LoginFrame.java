@@ -102,7 +102,13 @@ public class LoginFrame implements ActionListener {
 
             for (User user : users) {
                 if (user.getUsername().equals(usernameField) && user.getPassword().equals(passwordField)) {
-                    found = true;
+                    if(AdminBtn.isSelected()){
+                      found = true;
+                      JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
+                      new ClimateAction(true);
+                      frame.setVisible(false);
+                    }
+                    
                     JOptionPane.showMessageDialog(null, "Login successfully");
                     new ClimateAction();
                     frame.setVisible(false);

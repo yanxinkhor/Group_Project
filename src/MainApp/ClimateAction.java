@@ -13,7 +13,7 @@ public class ClimateAction {
     JLabel imageLabel;
     
 
-    public ClimateAction() {
+    public ClimateAction(boolean isAdmin) {
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(700, 450);
@@ -30,11 +30,18 @@ public class ClimateAction {
         imageLabel = new JLabel(imageIcon);
         frame.add(imageLabel, BorderLayout.CENTER);
         
-        String[] buttons = {
-            "SEARCH","VIEW","ADD ACTION",
-            "DELETE ACTION","UPDATE ACTION","NOTIFICATION",
-            "REAL-TIME DATA","PROFILE","LOGOUT"
-        };
+        String[] buttons;
+        if (isAdmin) {
+            buttons = new String[]{
+                "SEARCH", "VIEW", "ADD ACTION",
+                "DELETE ACTION", "UPDATE ACTION", 
+                "REAL-TIME DATA", "PROFILE", "LOGOUT"
+            };
+        } else {
+            buttons = new String[]{
+                "SEARCH", "VIEW","NOTIFICATION", "REAL-TIME DATA", "PROFILE", "LOGOUT"
+            };
+        }
         
         for (String buttonText : buttons) {
             JButton button = new JButton(buttonText);

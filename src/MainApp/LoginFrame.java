@@ -102,17 +102,22 @@ public class LoginFrame implements ActionListener {
 
             for (User user : users) {
                 if (user.getUsername().equals(usernameField) && user.getPassword().equals(passwordField)) {
-                    if(AdminBtn.isSelected()){
+                    if(AdminBtn.isSelected()&& user.isAdmin()){
                       found = true;
                       JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
                       new ClimateAction(true);
                       frame.setVisible(false);
+                      break;
+                    }else if(UserBtn.isSelected()&& !user.isAdmin()){
+                       found = true;
+                       JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
+                       new ClimateAction(false);
+                       frame.setVisible(false);
+                       break;
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Invalid login: Role mismatch");
+                        return;
                     }
-                    
-                    JOptionPane.showMessageDialog(null, "Login successfully");
-                    new ClimateAction();
-                    frame.setVisible(false);
-                    break;
                 }
             }
 

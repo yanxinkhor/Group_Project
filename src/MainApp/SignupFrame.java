@@ -22,6 +22,7 @@ public class SignupFrame implements ActionListener {
     JRadioButton AdminButton;
     JRadioButton UserButton;
     JLabel roleLabel;
+    JCheckBox showPassword;
 
     ArrayList<User> users;
 
@@ -53,9 +54,15 @@ public class SignupFrame implements ActionListener {
         passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(200, 250, 75, 25);
         passwordField = new JPasswordField();
+        passwordField.setEchoChar('*');
         passwordField.setBounds(300, 250, 220, 25);
         frame.add(passwordLabel);
         frame.add(passwordField);emailLabel = new JLabel("Email:");
+        
+        showPassword = new JCheckBox();
+        showPassword.setBounds(520, 250, 150, 25);
+        showPassword.addActionListener(this);
+        frame.add(showPassword);
        
         AdminButton = new JRadioButton("Admin");
         AdminButton.setBounds(325, 300, 100, 25);
@@ -85,6 +92,7 @@ public class SignupFrame implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(700, 450);
         frame.setLayout(null);
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 
@@ -121,10 +129,19 @@ public class SignupFrame implements ActionListener {
                     }
                     JOptionPane.showMessageDialog(null, "Sign Up Successfully");
                     new LoginFrame(users);
+                    frame.dispose();
                 }
             }
 
-        } else if (e.getSource() == BackButton) {
+        } else if(e.getSource() == showPassword){
+            
+            if(showPassword.isSelected()){
+                passwordField.setEchoChar((char) 0);
+            }else{
+                passwordField.setEchoChar('*');
+            }
+            
+        }else if (e.getSource() == BackButton) {
             frame.dispose();
             new LoginFrame(users);
         }

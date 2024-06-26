@@ -21,6 +21,7 @@ public class LoginFrame implements ActionListener {
     JPanel panel;
     JRadioButton AdminBtn;
     JRadioButton UserBtn;
+    JCheckBox showPassword;
 
     public LoginFrame(ArrayList<User> users) {
 
@@ -43,19 +44,28 @@ public class LoginFrame implements ActionListener {
 
         usernameLabel.setBounds(350, 100, 75, 25);
         frame.add(usernameLabel);
+        username.setBounds(425, 100, 200, 25);
+        frame.add(username);
         
         passwordLabel.setBounds(350, 150, 75, 25);
         frame.add(passwordLabel);
+        password.setBounds(425, 150, 200, 25);
+        password.setEchoChar('*');
+        frame.add(password);
+
+        
+        showPassword = new JCheckBox();
+        showPassword.setBounds(625, 150, 150, 25);
+        showPassword.addActionListener(this);
+        frame.add(showPassword);
         
         messageLabel.setBounds(70, 50, 350, 25);
         messageLabel.setFont(new Font("Poppins", Font.BOLD, 30));
         messageLabel.setForeground(Color.WHITE);
         frame.add(messageLabel);
 
-        username.setBounds(425, 100, 200, 25);
-        password.setBounds(425, 150, 200, 25);
-        frame.add(password);
-
+        
+       
         AdminBtn.setBounds(425, 180, 100, 25);
         UserBtn.setBounds(525, 180, 150, 25);
         ButtonGroup group = new ButtonGroup();
@@ -71,9 +81,7 @@ public class LoginFrame implements ActionListener {
         SignupBtn.setBounds(525, 220, 100, 25);
         SignupBtn.addActionListener(this);
         frame.add(SignupBtn);
-        
-      
-        frame.add(username);
+ 
         frame.add(panel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,7 +132,15 @@ public class LoginFrame implements ActionListener {
             if (!found) {
                 JOptionPane.showMessageDialog(null, "Invalid login");
             }
-        } else if (e.getSource() == SignupBtn) {
+        } else if(e.getSource() == showPassword){
+            
+            if(showPassword.isSelected()){
+                password.setEchoChar((char) 0);
+            }else{
+                password.setEchoChar('*');
+            }
+            
+        }else if (e.getSource() == SignupBtn) {
             new SignupFrame(users);
             frame.dispose();
         }

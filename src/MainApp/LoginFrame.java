@@ -7,7 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginFrame implements ActionListener {
-
+    
+    private User UserProfile; 
     private ArrayList<User> users;
 
     JFrame frame;
@@ -17,8 +18,8 @@ public class LoginFrame implements ActionListener {
     JPasswordField password;
     JLabel usernameLabel;
     JLabel passwordLabel;
-    JLabel messageLabel;
-    JPanel panel;
+    ImageIcon imageIcon;
+    JLabel imgLabel;
     JRadioButton AdminBtn;
     JRadioButton UserBtn;
     JCheckBox showPassword;
@@ -34,13 +35,18 @@ public class LoginFrame implements ActionListener {
         password = new JPasswordField();
         usernameLabel = new JLabel("Username:");
         passwordLabel = new JLabel("Password:");
-        messageLabel = new JLabel("WELCOME");
-        panel = new JPanel();
+        imageIcon = new ImageIcon(getClass().getResource("/Images/user.png"));
         AdminBtn = new JRadioButton("Admin");
         UserBtn = new JRadioButton("Normal User");
 
-        panel.setBackground(new Color(0xff769c));
-        panel.setBounds(0, 0, 300, 400);
+  
+        Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(image);
+
+        imgLabel = new JLabel(imageIcon);
+        imgLabel.setBounds(60, 80, 200, 200); 
+        frame.add(imgLabel);
+
 
         usernameLabel.setBounds(350, 100, 75, 25);
         frame.add(usernameLabel);
@@ -57,14 +63,7 @@ public class LoginFrame implements ActionListener {
         showPassword = new JCheckBox();
         showPassword.setBounds(625, 150, 150, 25);
         showPassword.addActionListener(this);
-        frame.add(showPassword);
-        
-        messageLabel.setBounds(70, 50, 350, 25);
-        messageLabel.setFont(new Font("Poppins", Font.BOLD, 30));
-        messageLabel.setForeground(Color.WHITE);
-        frame.add(messageLabel);
-
-        
+        frame.add(showPassword);    
        
         AdminBtn.setBounds(425, 180, 100, 25);
         UserBtn.setBounds(525, 180, 150, 25);
@@ -82,8 +81,6 @@ public class LoginFrame implements ActionListener {
         SignupBtn.addActionListener(this);
         frame.add(SignupBtn);
  
-        frame.add(panel);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(700, 450);
@@ -92,6 +89,7 @@ public class LoginFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+              
         if (e.getSource() == LoginBtn) {
             String usernameField = username.getText();
             String passwordField = String.valueOf(password.getPassword());
@@ -110,20 +108,22 @@ public class LoginFrame implements ActionListener {
 
             for (User user : users) {
                 if (user.getUsername().equals(usernameField) && user.getPassword().equals(passwordField)) {
-                    if(AdminBtn.isSelected()&& user.isAdmin()){
+                    if(AdminBtn.isSelected()&& user.getisAdmin()){
                       found = true;
+                      UserProfile = user;
                       JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
-                      new ClimateAction(true,users);
+                      new ClimateAction(true,users,UserProfile);
                       frame.dispose();
                       break;
-                    }else if(UserBtn.isSelected()&& !user.isAdmin()){
+                    }else if(UserBtn.isSelected()&& !user.getisAdmin()){
                        found = true;
+                       UserProfile = user;
                        JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
-                       new ClimateAction(false,users);
+                       new ClimateAction(false,users,UserProfile);
                        frame.dispose();
                        break;
                     }else {
-                        JOptionPane.showMessageDialog(null, "Invalid login: Role mismatch");
+                        JOptionPane.showMessageDialog(null, "The role is mismatch");
                         return;
                     }
                 }

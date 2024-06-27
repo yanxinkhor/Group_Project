@@ -111,7 +111,7 @@ public class SignupFrame implements ActionListener {
             } else {
                 boolean userExists = false;
                 for (User user : users) {
-                    if (user.getUsername().equals(username) || user.getEmail().equals(email)) {
+                    if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                         userExists = true;
                         JOptionPane.showMessageDialog(null, "User already exist,please try another");
                     }

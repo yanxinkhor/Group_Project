@@ -13,9 +13,12 @@ public class ClimateAction {
     ImageIcon imageIcon;
     JLabel imageLabel;
     ArrayList<User> users;
+    Profile profileWindow;
+    User UserProfile;
 
-    public ClimateAction(boolean isAdmin, ArrayList<User> users) {
+    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile) {
         this.users = users;
+        this.UserProfile = UserProfile;
         
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,7 +65,7 @@ public class ClimateAction {
         }
         
         frame.add(sidebtn, BorderLayout.WEST);
-        
+     
     }
     
       private class ButtonAction implements ActionListener {
@@ -70,25 +73,41 @@ public class ClimateAction {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
             String action = source.getText();
+            
+             if (profileWindow != null) {
+                profileWindow.dispose();
+                profileWindow= null;
+            }
+             
             switch (action) {
                 case "DASHBOARD":
                     imageLabel.setVisible(true);
+                    
                     break;
                 case "SEARCH":
                     break;
                 case "VIEW":
                     imageLabel.setVisible(false);
                     break;
+                    
                 case "ADD ACTION":
                     break;
+                    
                 case "DELETE ACTION":
                     break;
+                    
                 case "UPDATE ACTION":
                     break;
+                    
                 case "REAL-TIME DATA":
                     break;
-                case "PROFILE":
+                    
+                case "PROFILE":      
+                   if (UserProfile != null) {
+                        profileWindow = new Profile(UserProfile, ClimateAction.this); 
+                    } 
                     break;
+                    
                 case "LOGOUT":
                    frame.dispose();
                    new LoginFrame(users);
@@ -101,5 +120,4 @@ public class ClimateAction {
         }
     }
 }
-
 

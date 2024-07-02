@@ -37,34 +37,37 @@ public class User {
     public boolean getisAdmin() {
         return isAdmin;
     }
-    
-    public String getGender(){
+
+    public String getGender() {
         return gender;
     }
-    
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     public void setPassword(String password) {
         this.password = password;
     }
-    
-     public void setGender(String gender) {
+
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-    
+
+    boolean isAdmin() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

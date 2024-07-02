@@ -19,43 +19,33 @@ public class ClimateAction {
     public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile) {
         this.users = users;
         this.UserProfile = UserProfile;
-        
+
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(700, 450);
+        frame.setSize(897, 545);
         frame.setLayout(new BorderLayout());
         frame.setResizable(false);
+        frame.setLocation(150, 100);
         frame.setVisible(true);
-        
+
         sidebtn = new JPanel();
-        sidebtn.setBackground(new Color(0xff769c));
         sidebtn.setLayout(new GridLayout(0, 1));
-        sidebtn.setPreferredSize(new Dimension(180,0));
-        
+        sidebtn.setPreferredSize(new Dimension(180, 0));
+
         imageIcon = new ImageIcon(getClass().getResource("/Images/SDG_13.jpg"));
-        Image image = imageIcon.getImage();
-        Image resizedImage = image.getScaledInstance(520, 420, Image.SCALE_SMOOTH);
-        imageIcon = new ImageIcon(resizedImage);
-        
+
         imageLabel = new JLabel(imageIcon);
         frame.add(imageLabel, BorderLayout.CENTER);
-        
+
         String[] buttons;
-        if (isAdmin) {
-            buttons = new String[]{
-                "DASHBOARD","SEARCH", "VIEW", "ADD ACTION",
-                "DELETE ACTION", "UPDATE ACTION", 
-                "REAL-TIME DATA", "PROFILE", "LOGOUT"
-            };
-        } else {
-            buttons = new String[]{
-                "DASHBOARD", "SEARCH", "VIEW","NOTIFICATION", 
-                "REAL-TIME DATA", "PROFILE", "LOGOUT"
-            };
-        }
-        
-        for (String buttonText : buttons) {
-            JButton button = new JButton(buttonText);
+
+        buttons = new String[]{
+            "DASHBOARD", "VIEW",
+            "REAL-TIME DATA", "PROFILE", "LOGOUT"
+        };
+
+        for (String Allbutton : buttons) {
+            JButton button = new JButton(Allbutton);
             button.setForeground(Color.WHITE);
             button.setBackground(new Color(0x2E2B5F));
             button.setFocusPainted(false);
@@ -63,61 +53,64 @@ public class ClimateAction {
             button.addActionListener(new ButtonAction());
             sidebtn.add(button);
         }
-        
+
         frame.add(sidebtn, BorderLayout.WEST);
-     
+
     }
-    
-      private class ButtonAction implements ActionListener {
-        
+
+    private class ButtonAction implements ActionListener {
+
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
             String action = source.getText();
-            
-             if (profileWindow != null) {
+
+            if (profileWindow != null) {
                 profileWindow.dispose();
-                profileWindow= null;
+                profileWindow = null;
             }
-             
+
             switch (action) {
                 case "DASHBOARD":
                     imageLabel.setVisible(true);
-                    
+
                     break;
                 case "SEARCH":
                     break;
                 case "VIEW":
-                    imageLabel.setVisible(false);
+                    frame.dispose();
+                    View ViewFrame = new View(UserProfile, ClimateAction.this);
+                    ViewFrame.setVisible(true);
                     break;
-                    
-                case "ADD ACTION":
-                    break;
-                    
-                case "DELETE ACTION":
-                    break;
-                    
-                case "UPDATE ACTION":
-                    break;
-                    
+
                 case "REAL-TIME DATA":
                     break;
-                    
-                case "PROFILE":      
-                   if (UserProfile != null) {
-                        profileWindow = new Profile(UserProfile, ClimateAction.this); 
-                    } 
+
+                case "PROFILE":
+                    if (UserProfile != null) {
+                        profileWindow = new Profile(UserProfile, ClimateAction.this);
+                    }
                     break;
-                    
+
                 case "LOGOUT":
-                   frame.dispose();
-                   new LoginFrame(users);
-                   break;
+                    frame.dispose();
+                    new LoginFrame(users);
+                    break;
 
                 default:
-                    
+
                     break;
             }
         }
     }
-}
+    
+    public JFrame getFrame() {
+        return frame;
+    }
 
+    public static void main(String[] args) {
+        ArrayList<User> users = new ArrayList<>();
+        new LoginFrame(users);
+
+    }
+
+}

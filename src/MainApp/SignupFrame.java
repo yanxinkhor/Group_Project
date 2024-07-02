@@ -93,6 +93,7 @@ public class SignupFrame implements ActionListener {
         frame.setSize(700, 450);
         frame.setLayout(null);
         frame.setResizable(false);
+        frame.setLocation(280,150);
         frame.setVisible(true);
     }
 

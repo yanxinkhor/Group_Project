@@ -11,7 +11,6 @@ import java.awt.*;
 public class Profile extends JFrame {
     
     private User user;
-    JPanel panel;
     JLabel usernameLabel;
     JLabel emailLabel;
     JLabel phoneLabel;
@@ -29,52 +28,59 @@ public class Profile extends JFrame {
         setSize(400,250);
         setLocation(200,100);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
-        
-        panel = new JPanel(new GridLayout(4, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setLayout(null);
         
         usernameLabel = new JLabel("Username:");
+        usernameLabel.setBounds(10, 10, 125, 25);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 16)); 
         
         usernameField = new JTextField(user.getUsername());
+        usernameField.setBounds(150, 10, 200, 25);
         usernameField.setEditable(false);
         usernameField.setFont(new Font("Arial", Font.PLAIN, 16));
         
-        panel.add(usernameLabel);
-        panel.add(usernameField);
+        add(usernameLabel);
+        add(usernameField);
         
         emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(10, 50, 125, 25);
         emailLabel.setFont(new Font("Arial", Font.BOLD, 16));
         
         emailField = new JTextField(user.getEmail());
+        emailField.setBounds(150, 50, 200, 25);
         emailField.setEditable(false);
         emailField.setFont(new Font("Arial", Font.PLAIN, 16));
         
-        panel.add(emailLabel);
-        panel.add(emailField);
+        add(emailLabel);
+        add(emailField);
         
         phoneLabel = new JLabel("Phone Number:");
+        phoneLabel.setBounds(10, 90, 125, 25);
         phoneLabel.setFont(new Font("Arial", Font.BOLD, 16));
         
         phoneField = new JTextField(user.getPhoneNumber());
+        phoneField.setBounds(150, 90, 200, 25);
         phoneField.setEditable(false);
         phoneField.setFont(new Font("Arial", Font.PLAIN, 16));
         
-        panel.add(phoneLabel);
-        panel.add(phoneField);
+        add(phoneLabel);
+        add(phoneField);
         
         roleLabel = new JLabel("Role:");
+        roleLabel.setBounds(10, 130, 125, 25);
         roleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         
         roleField = new JTextField(user.getisAdmin() ? "Admin" : "Normal User");
         roleField.setEditable(false);
+        roleField.setBounds(150, 130, 200, 25);
         roleField.setFont(new Font("Arial", Font.PLAIN, 16)); 
-        panel.add(roleLabel);
-        panel.add(roleField);
-
-        add(panel, BorderLayout.CENTER);
+        add(roleLabel);
+        add(roleField);
         setVisible(true);
    
    }
+       public boolean isAdmin() {
+        return user.isAdmin();
+    }
+   
 }

@@ -6,6 +6,8 @@ package MainApp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class Profile extends JFrame {
@@ -20,13 +22,15 @@ public class Profile extends JFrame {
     JTextField phoneField;
     JTextField roleField;
     ClimateAction action;
+    JButton edit;
+    JButton update;
 
    public Profile(User user,ClimateAction action) {
         this.user = user;
         this.action = action;
         
         setSize(400,250);
-        setLocation(200,100);
+        setLocation(450,220);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         
@@ -77,7 +81,41 @@ public class Profile extends JFrame {
         add(roleLabel);
         add(roleField);
         setVisible(true);
+        
+        edit = new JButton("Edit");
+        edit.setBounds(150,170,80,30);
+        edit.addActionListener(new editAction());
+        add(edit);
+        
+        update = new JButton("Update");
+        update.setBounds(250, 170, 80, 30);
+        update.addActionListener(new updateAction());
+        update.setEnabled(false);  // Initially disabled
+        add(update);
    
+   }
+   private class editAction implements ActionListener{
+       public void actionPerformed(ActionEvent e) {
+            usernameField.setEditable(true);
+            emailField.setEditable(true);
+            phoneField.setEditable(true);
+            
+            update.setEnabled(true);
+       }
+   }
+   
+   private class updateAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            user.setUsername(usernameField.getText());
+            user.setEmail(emailField.getText());
+            user.setPhoneNumber(phoneField.getText());
+            JOptionPane.showMessageDialog(Profile.this, "Profile updated successfully");
+            
+            usernameField.setEditable(false);
+            emailField.setEditable(false);
+            phoneField.setEditable(false);
+            update.setEnabled(false);
+        }
    }
        public boolean isAdmin() {
         return user.isAdmin();

@@ -4,7 +4,10 @@
  */
 package MainApp;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -21,6 +24,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.BorderFactory;
+import javax.swing.JTextField;
 
 public class View extends javax.swing.JFrame {
 
@@ -29,12 +39,30 @@ public class View extends javax.swing.JFrame {
 
     private User userProfile;
     private ClimateAction climateAction;
+    ArrayList<Add> countryDataList = new ArrayList<>();
 
-    public View(User userProfile, ClimateAction action) {
+    public View(User userProfile, ClimateAction action, Add addingInfo) {
         this.userProfile = userProfile;
         this.climateAction = action;
+
         initComponents();
+        loadContentIntoTextArea("src/textfiles/jTextArea1.txt", jTextArea1);
+        loadContentIntoTextArea("src/textfiles/jTextArea2.txt", jTextArea2);
+        loadContentIntoTextArea("src/textfiles/jTextArea3.txt", jTextArea3);
+        loadContentIntoTextArea("src/textfiles/jTextArea4.txt", jTextArea4);
+        loadContentIntoTextArea("src/textfiles/jTextArea5.txt", jTextArea5);
+        loadContentIntoTextArea("src/textfiles/jTextArea6.txt", jTextArea6);
+        loadContentIntoTextArea("src/textfiles/jTextArea7.txt", jTextArea7);
+        loadContentIntoTextArea("src/textfiles/jTextArea8.txt", jTextArea8);
+        loadContentIntoTextArea("src/textfiles/jTextArea9.txt", jTextArea9);
+        loadContentIntoTextArea("src/textfiles/jTextArea10.txt", jTextArea10);
+        loadContentIntoTextArea("src/textfiles/jTextArea11.txt", jTextArea11);
+        loadContentIntoTextArea("src/textfiles/jTextArea12.txt", jTextArea12);
+        loadContentIntoTextArea("src/textfiles/jTextArea13.txt", jTextArea13);
+        loadContentIntoTextArea("src/textfiles/jTextArea14.txt", jTextArea14);
+        loadContentIntoTextArea("src/textfiles/jTextArea15.txt", jTextArea15);
         setupUIBasedOnUserRole();
+
         jTabbedPane1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 if (SwingUtilities.isRightMouseButton(evt) && evt.getClickCount() == 1) {
@@ -64,6 +92,79 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        AddInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JPanel panel = new JPanel();
+                panel = new JPanel(new GridLayout(4, 2, 10, 10));
+                panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+                JLabel countryLabel = new JLabel("Country Name:");
+                countryLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+                JTextField countryField = new JTextField();
+                countryField.setFont(new Font("Arial", Font.PLAIN, 16));
+
+                panel.add(countryLabel);
+                panel.add(countryField);
+
+                JLabel numOfDeathsLabel = new JLabel("Number Of Deaths:");
+                numOfDeathsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+                JTextField numOfDeathsField = new JTextField();
+                numOfDeathsField.setFont(new Font("Arial", Font.PLAIN, 16));
+
+                panel.add(numOfDeathsLabel);
+                panel.add(numOfDeathsField);
+
+                JLabel numOfInjuredLabel = new JLabel("Number Of Injured:");
+                numOfInjuredLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+                JTextField numOfInjuredField = new JTextField();
+                numOfInjuredField.setFont(new Font("Arial", Font.PLAIN, 16));
+
+                panel.add(numOfInjuredLabel);
+                panel.add(numOfInjuredField);
+
+                JLabel missingPersonLabel = new JLabel("Number of Missing Person");
+                missingPersonLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+                JTextField missingPersonField = new JTextField();
+                missingPersonField.setFont(new Font("Arial", Font.BOLD, 16));
+
+                panel.add(missingPersonLabel);
+                panel.add(missingPersonField);
+
+                int option = JOptionPane.showConfirmDialog(null, panel, "Enter Information",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (option == JOptionPane.OK_OPTION) {
+                    String country = countryField.getText().trim();
+                    String numOfDeathsStr = numOfDeathsField.getText().trim();
+                    String numOfInjuredStr = numOfInjuredField.getText().trim();
+                    String missingPersonStr = missingPersonField.getText().trim();
+
+                    if (country.isEmpty() || numOfDeathsStr.isEmpty() || numOfInjuredStr.isEmpty() || missingPersonStr.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "All fields must be filled", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    try {
+                        country = countryField.getText();
+                        int numOfDeaths = Integer.parseInt(numOfDeathsStr);
+                        int numOfInjured = Integer.parseInt(numOfInjuredStr);
+                        int missingPerson = Integer.parseInt(missingPersonStr);
+
+                        Add addingInfo = new Add(country, numOfDeaths, numOfInjured, missingPerson);
+                        addingInfo.addInfoToCountryList();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
         EditText2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jTextArea10.setEditable(true);
@@ -74,6 +175,7 @@ public class View extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String editedText10 = jTextArea10.getText();
                 jTextArea10.setText(editedText10);
+                saveContentToFile("src/textfiles/jTextArea10.txt", jTextArea10);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -109,8 +211,12 @@ public class View extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String editedText9 = jTextArea9.getText();
                 jTextArea9.setText(editedText9);
+                jTextArea9.setEditable(false);
                 String editedText14 = jTextArea14.getText();
                 jTextArea14.setText(editedText14);
+                jTextArea14.setEditable(false);
+                saveContentToFile("src/textfiles/jTextArea9.txt", jTextArea9);
+                saveContentToFile("src/textfiles/jTextArea14.txt", jTextArea14);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -165,8 +271,12 @@ public class View extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String editedText11 = jTextArea11.getText();
                 jTextArea11.setText(editedText11);
+                jTextArea11.setEditable(false);
                 String editedText15 = jTextArea15.getText();
                 jTextArea15.setText(editedText15);
+                jTextArea15.setEditable(false);
+                saveContentToFile("src/textfiles/jTextArea11.txt", jTextArea11);
+                saveContentToFile("src/textfiles/jTextArea15.txt", jTextArea15);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -223,14 +333,24 @@ public class View extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String editedText2 = jTextArea2.getText();
                 jTextArea2.setText(editedText2);
+                jTextArea2.setEditable(false);
                 String editedText6 = jTextArea6.getText();
                 jTextArea6.setText(editedText6);
+                jTextArea6.setEditable(false);
                 String editedText7 = jTextArea7.getText();
                 jTextArea7.setText(editedText7);
+                jTextArea7.setEditable(false);
                 String editedText8 = jTextArea8.getText();
                 jTextArea8.setText(editedText8);
+                jTextArea8.setEditable(false);
                 String editedText13 = jTextArea13.getText();
                 jTextArea13.setText(editedText13);
+                jTextArea13.setEditable(false);
+                saveContentToFile("src/textfiles/jTextArea2.txt", jTextArea2);
+                saveContentToFile("src/textfiles/jTextArea6.txt", jTextArea6);
+                saveContentToFile("src/textfiles/jTextArea7.txt", jTextArea7);
+                saveContentToFile("src/textfiles/jTextArea8.txt", jTextArea8);
+                saveContentToFile("src/textfiles/jTextArea13.txt", jTextArea13);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -343,13 +463,21 @@ public class View extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String editedText1 = jTextArea1.getText();
                 jTextArea1.setText(editedText1);
+                jTextArea1.setEditable(false);
                 String editedText4 = jTextArea4.getText();
+                jTextArea4.setEditable(false);
                 jTextArea4.setText(editedText4);
                 String editedText5 = jTextArea5.getText();
+                jTextArea5.setEditable(false);
                 jTextArea5.setText(editedText5);
                 String editedText3 = jTextArea3.getText();
+                jTextArea3.setEditable(false);
                 jTextArea3.setText(editedText3);
-                isEditable = false;
+                textChanged = false;
+                saveContentToFile("src/textfiles/jTextArea1.txt", jTextArea1);
+                saveContentToFile("src/textfiles/jTextArea4.txt", jTextArea4);
+                saveContentToFile("src/textfiles/jTextArea5.txt", jTextArea5);
+                saveContentToFile("src/textfiles/jTextArea3.txt", jTextArea3);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -369,7 +497,7 @@ public class View extends javax.swing.JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                isEditable = true;
+                textChanged = true;
                 SaveButtonStatus();
             }
         });
@@ -388,7 +516,7 @@ public class View extends javax.swing.JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                isEditable = true;
+                textChanged = true;
                 SaveButtonStatus();
             }
         });
@@ -406,7 +534,7 @@ public class View extends javax.swing.JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                isEditable = true;
+                textChanged = true;
                 SaveButtonStatus();
             }
         });
@@ -424,7 +552,7 @@ public class View extends javax.swing.JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                isEditable = true;
+                textChanged = true;
                 SaveButtonStatus();
             }
         });
@@ -442,6 +570,7 @@ public class View extends javax.swing.JFrame {
                 jTextArea12.setText(editedText);
                 jTextArea12.setEditable(false);
                 textChanged = false;
+                saveContentToFile("src/textfiles/jTextArea12.txt", jTextArea12);
                 SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
@@ -484,6 +613,7 @@ public class View extends javax.swing.JFrame {
                 EditText3.setVisible(true);
                 SaveText3.setVisible(true);
                 enableTabManagement(true);
+                AddInfo.setVisible(true);
             } else {
                 ButtonEdit.setVisible(false);
                 ButtonSave.setVisible(false);
@@ -498,6 +628,7 @@ public class View extends javax.swing.JFrame {
                 EditText3.setVisible(false);
                 SaveText3.setVisible(false);
                 enableTabManagement(false);
+                AddInfo.setVisible(false);
             }
         }
     }
@@ -513,11 +644,42 @@ public class View extends javax.swing.JFrame {
 
     private void SaveButtonStatus() {
         ButtonSave.setEnabled(textChanged);
-        NewsSave.setEnabled(isEditable);
+        NewsSave.setEnabled(textChanged);
         SaveNo.setEnabled(textChanged);
         SaveText.setEnabled(textChanged);
         SaveText2.setEnabled(textChanged);
         SaveText3.setEnabled(textChanged);
+    }
+
+    public static void loadContentIntoTextArea(String filePath, JTextArea textArea) {
+        StringBuilder fileContent = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                fileContent.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        String newText = fileContent.toString().trim();
+        String currentText = textArea.getText().trim();
+
+        if (!newText.equals(currentText)) {
+            textArea.setText(newText);
+        }
+    }
+
+    public static void saveContentToFile(String filePath, JTextArea textArea) {
+        String contentToSave = textArea.getText();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(contentToSave);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void close() {
@@ -597,6 +759,13 @@ public class View extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        try {
+            AddInfo =(javax.swing.JButton)java.beans.Beans.instantiate(getClass().getClassLoader(), "MainApp.View_AddInfo");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
         jPanel10 = new javax.swing.JPanel();
         jScrollPane10 = new javax.swing.JScrollPane();
         jTextArea10 = new javax.swing.JTextArea();
@@ -637,9 +806,7 @@ public class View extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(700, 450));
         setMinimumSize(new java.awt.Dimension(700, 450));
-        setPreferredSize(new java.awt.Dimension(700, 450));
         setSize(new java.awt.Dimension(1199, 811));
 
         jPanel1.setBackground(new java.awt.Color(72, 119, 62));
@@ -685,7 +852,7 @@ public class View extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addContainerGap(1055, Short.MAX_VALUE))
+                .addContainerGap(1042, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1271,6 +1438,8 @@ public class View extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(AddInfo)
+                .addGap(18, 18, 18)
                 .addComponent(EditNo)
                 .addGap(18, 18, 18)
                 .addComponent(SaveNo)
@@ -1281,14 +1450,16 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(SaveNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(EditNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(AddInfo)))
+                        .addGap(27, 27, 27)))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1296,8 +1467,8 @@ public class View extends javax.swing.JFrame {
                     .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1596,7 +1767,7 @@ public class View extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 884, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1629,7 +1800,7 @@ public class View extends javax.swing.JFrame {
                 .addGap(84, 84, 84))
         );
 
-        setSize(new java.awt.Dimension(1213, 819));
+        setSize(new java.awt.Dimension(1197, 790));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1656,13 +1827,14 @@ public class View extends javax.swing.JFrame {
         int lastIndex = jTabbedPane1.getTabCount() - 1;
         if (jTabbedPane1.getSelectedIndex() == lastIndex) {
 
-            String tabName = "";
+            String tabName;
             while (true) {
                 tabName = JOptionPane.showInputDialog("Enter a tab name");
 
                 if (tabName == null) {
-                    JOptionPane.showMessageDialog(this, "You have cancelled");
+                    JOptionPane.showMessageDialog(this, "Action cancelled");
                     break;
+
                 } else if (tabName.trim().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Please enter a tab name");
                 } else {
@@ -1671,16 +1843,17 @@ public class View extends javax.swing.JFrame {
 
                     jTabbedPane1.insertTab(tabName, null, new JScrollPane(textArea), null, lastIndex);
                     jTabbedPane1.setTabComponentAt(lastIndex, tabTitleLabel);
-                    jTabbedPane1.setSelectedIndex(lastIndex + 1);
+                    jTabbedPane1.setSelectedIndex(lastIndex);
                     break;
                 }
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
-
+            }
         }
-    }
+
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddInfo;
     private javax.swing.JLabel BackArrow;
     private javax.swing.JButton ButtonEdit;
     private javax.swing.JButton ButtonSave;

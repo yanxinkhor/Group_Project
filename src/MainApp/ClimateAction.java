@@ -15,20 +15,23 @@ public class ClimateAction {
     ArrayList<User> users;
     Profile profileWindow;
     User UserProfile;
+    Add addingInfo;
 
-    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile) {
+    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile, Add addingInfo) {
         this.users = users;
         this.UserProfile = UserProfile;
+        this.addingInfo = addingInfo;
 
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(897, 545);
         frame.setLayout(new BorderLayout());
-        frame.setResizable(false);
         frame.setLocation(150, 100);
+        frame.setResizable(false);
         frame.setVisible(true);
 
         sidebtn = new JPanel();
+        sidebtn.setBackground(new Color(0xff769c));
         sidebtn.setLayout(new GridLayout(0, 1));
         sidebtn.setPreferredSize(new Dimension(180, 0));
 
@@ -36,6 +39,7 @@ public class ClimateAction {
 
         imageLabel = new JLabel(imageIcon);
         frame.add(imageLabel, BorderLayout.CENTER);
+        
 
         String[] buttons;
 
@@ -44,8 +48,8 @@ public class ClimateAction {
             "REAL-TIME DATA", "PROFILE", "LOGOUT"
         };
 
-        for (String Allbutton : buttons) {
-            JButton button = new JButton(Allbutton);
+        for (String buttonText : buttons) {
+            JButton button = new JButton(buttonText);
             button.setForeground(Color.WHITE);
             button.setBackground(new Color(0x2E2B5F));
             button.setFocusPainted(false);
@@ -70,15 +74,10 @@ public class ClimateAction {
             }
 
             switch (action) {
-                case "DASHBOARD":
-                    imageLabel.setVisible(true);
 
-                    break;
-                case "SEARCH":
-                    break;
                 case "VIEW":
                     frame.dispose();
-                    View ViewFrame = new View(UserProfile, ClimateAction.this);
+                    View ViewFrame = new View(UserProfile, ClimateAction.this, addingInfo);
                     ViewFrame.setVisible(true);
                     break;
 
@@ -102,14 +101,17 @@ public class ClimateAction {
             }
         }
     }
-    
+
     public JFrame getFrame() {
         return frame;
     }
-
+    
     public static void main(String[] args) {
         ArrayList<User> users = new ArrayList<>();
+        User userProfile = new User("username", "email@example.com", "1234567890", "password", true);
+        Add addingInfo = new Add("United States", 50, 20,250);
         new LoginFrame(users);
+
     }
 
 }

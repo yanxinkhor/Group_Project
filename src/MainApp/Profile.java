@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package MainApp;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 public class Profile extends JFrame {
     
@@ -90,7 +85,7 @@ public class Profile extends JFrame {
         update = new JButton("Update");
         update.setBounds(250, 170, 80, 30);
         update.addActionListener(new updateAction());
-        update.setEnabled(false);  // Initially disabled
+        update.setEnabled(false); 
         add(update);
    
    }

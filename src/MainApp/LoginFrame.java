@@ -7,12 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginFrame implements ActionListener {
-    
-    private User UserProfile; 
-    private ArrayList<User> users;
-    private Add addingInfo;
-           
 
+    private User UserProfile;
+    private ArrayList<User> users;
+
+    ArrayList<Add> countryList;
     JFrame frame;
     JButton LoginBtn;
     JButton SignupBtn;
@@ -26,9 +25,10 @@ public class LoginFrame implements ActionListener {
     JRadioButton UserBtn;
     JCheckBox showPassword;
 
-    public LoginFrame(ArrayList<User> users) {
+    public LoginFrame(ArrayList<User> users, ArrayList<Add> countryList) {
 
         this.users = users;
+        this.countryList = countryList;
         frame = new JFrame();
 
         LoginBtn = new JButton("Login");
@@ -41,32 +41,29 @@ public class LoginFrame implements ActionListener {
         AdminBtn = new JRadioButton("Admin");
         UserBtn = new JRadioButton("Normal User");
 
-  
         Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         imageIcon = new ImageIcon(image);
 
         imgLabel = new JLabel(imageIcon);
-        imgLabel.setBounds(60, 80, 200, 200); 
+        imgLabel.setBounds(60, 80, 200, 200);
         frame.add(imgLabel);
-
 
         usernameLabel.setBounds(350, 100, 75, 25);
         frame.add(usernameLabel);
         username.setBounds(425, 100, 200, 25);
         frame.add(username);
-        
+
         passwordLabel.setBounds(350, 150, 75, 25);
         frame.add(passwordLabel);
         password.setBounds(425, 150, 200, 25);
         password.setEchoChar('*');
         frame.add(password);
 
-        
         showPassword = new JCheckBox();
         showPassword.setBounds(625, 150, 150, 25);
         showPassword.addActionListener(this);
-        frame.add(showPassword);    
-       
+        frame.add(showPassword);
+
         AdminBtn.setBounds(425, 180, 100, 25);
         UserBtn.setBounds(525, 180, 150, 25);
         ButtonGroup group = new ButtonGroup();
@@ -82,7 +79,7 @@ public class LoginFrame implements ActionListener {
         SignupBtn.setBounds(525, 220, 100, 25);
         SignupBtn.addActionListener(this);
         frame.add(SignupBtn);
- 
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(700, 450);
@@ -93,12 +90,12 @@ public class LoginFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-              
+
         if (e.getSource() == LoginBtn) {
             String usernameField = username.getText();
             String passwordField = String.valueOf(password.getPassword());
-            
-            if(!AdminBtn.isSelected() && !UserBtn.isSelected()){
+
+            if (!AdminBtn.isSelected() && !UserBtn.isSelected()) {
                 JOptionPane.showMessageDialog(frame, "Please select Admin or User");
                 return;
             }
@@ -112,21 +109,21 @@ public class LoginFrame implements ActionListener {
 
             for (User user : users) {
                 if (user.getUsername().equals(usernameField) && user.getPassword().equals(passwordField)) {
-                    if(AdminBtn.isSelected()&& user.getisAdmin()){
-                      found = true;
-                      UserProfile = user;
-                      JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
-                      new ClimateAction(true,users,UserProfile,addingInfo);
-                      frame.dispose();
-                      break;
-                    }else if(UserBtn.isSelected()&& !user.getisAdmin()){
-                       found = true;
-                       UserProfile = user;
-                       JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
-                       new ClimateAction(false,users,UserProfile,addingInfo);
-                       frame.dispose();
-                       break;
-                    }else {
+                    if (AdminBtn.isSelected() && user.getisAdmin()) {
+                        found = true;
+                        UserProfile = user;
+                        JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
+                        new ClimateAction(true, users, UserProfile, countryList);
+                        frame.dispose();
+                        break;
+                    } else if (UserBtn.isSelected() && !user.getisAdmin()) {
+                        found = true;
+                        UserProfile = user;
+                        JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
+                        new ClimateAction(false, users, UserProfile, countryList);
+                        frame.dispose();
+                        break;
+                    } else {
                         JOptionPane.showMessageDialog(null, "The role is not match");
                         return;
                     }
@@ -136,17 +133,17 @@ public class LoginFrame implements ActionListener {
             if (!found) {
                 JOptionPane.showMessageDialog(null, "Invalid login");
             }
-        } else if(e.getSource() == showPassword){
-            
-            if(showPassword.isSelected()){
+        } else if (e.getSource() == showPassword) {
+
+            if (showPassword.isSelected()) {
                 password.setEchoChar((char) 0);
-            }else{
+            } else {
                 password.setEchoChar('*');
             }
-            
-        }else if (e.getSource() == SignupBtn) {
-            new SignupFrame(users);
-            frame.dispose();
+
+        } else if (e.getSource() == SignupBtn) {
+            new SignupFrame(users, countryList);
+            frame.setVisible(false);
         }
     }
 

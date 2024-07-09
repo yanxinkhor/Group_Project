@@ -25,10 +25,12 @@ public class SignupFrame implements ActionListener {
     JCheckBox showPassword;
 
     ArrayList<User> users;
+    ArrayList<Add> countryList;
 
-    public SignupFrame(ArrayList<User> users) {
+    public SignupFrame(ArrayList<User> users,ArrayList<Add> countryList) {
         frame = new JFrame("Signup");
         this.users = users;
+        this.countryList = countryList;
 
         usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(200, 100, 75, 25);
@@ -129,8 +131,8 @@ public class SignupFrame implements ActionListener {
                         users.add(normalUser);
                     }
                     JOptionPane.showMessageDialog(null, "Sign Up Successfully");
-                    new LoginFrame(users);
-                    frame.dispose();
+                    new LoginFrame(users,countryList);
+                    frame.setVisible(false);
                 }
             }
 
@@ -143,8 +145,8 @@ public class SignupFrame implements ActionListener {
             }
             
         }else if (e.getSource() == BackButton) {
-            frame.dispose();
-            new LoginFrame(users);
+            frame.setVisible(false);
+            new LoginFrame(users,countryList);
         }
     }
 

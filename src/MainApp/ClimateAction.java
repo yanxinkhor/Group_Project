@@ -15,12 +15,13 @@ public class ClimateAction {
     ArrayList<User> users;
     Profile profileWindow;
     User UserProfile;
-    Add addingInfo;
+    ArrayList<Add> countryList;
+    
 
-    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile, Add addingInfo) {
+    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile,ArrayList<Add> countryList ) {
         this.users = users;
         this.UserProfile = UserProfile;
-        this.addingInfo = addingInfo;
+        this.countryList = countryList;
 
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,17 +40,23 @@ public class ClimateAction {
 
         imageLabel = new JLabel(imageIcon);
         frame.add(imageLabel, BorderLayout.CENTER);
-        
 
         String[] buttons;
 
-        buttons = new String[]{
-            "DASHBOARD", "VIEW",
-            "REAL-TIME DATA", "PROFILE", "LOGOUT"
-        };
+        if (isAdmin) {
+            buttons = new String[]{
+                "DASHBOARD", "VIEW",
+                "WEATHER", "USER FEEDBACK", "PROFILE", "LOGOUT"
+            };
+        } else {
+            buttons = new String[]{
+                "DASHBOARD", "VIEW",
+                "WEATHER", "PROFILE", "SHARE", "LOGOUT"
+            };
+        }
 
-        for (String buttonText : buttons) {
-            JButton button = new JButton(buttonText);
+        for (String btn : buttons) {
+            JButton button = new JButton(btn);
             button.setForeground(Color.WHITE);
             button.setBackground(new Color(0x2E2B5F));
             button.setFocusPainted(false);
@@ -77,11 +84,11 @@ public class ClimateAction {
 
                 case "VIEW":
                     frame.dispose();
-                    View ViewFrame = new View(UserProfile, ClimateAction.this, addingInfo);
+                    View ViewFrame = new View(UserProfile, ClimateAction.this, countryList);
                     ViewFrame.setVisible(true);
                     break;
 
-                case "REAL-TIME DATA":
+                case "WEATHER":
                     break;
 
                 case "PROFILE":
@@ -89,10 +96,15 @@ public class ClimateAction {
                         profileWindow = new Profile(UserProfile, ClimateAction.this);
                     }
                     break;
+                case "USER FEEDBACK":
+                    break;
+                case "SHARE":
+                    new Share(ClimateAction.this);
+                    break;
 
                 case "LOGOUT":
-                    frame.dispose();
-                    new LoginFrame(users);
+                    frame.setVisible(false);
+                    new LoginFrame(users,countryList);
                     break;
 
                 default:
@@ -105,12 +117,14 @@ public class ClimateAction {
     public JFrame getFrame() {
         return frame;
     }
-    
+
     public static void main(String[] args) {
         ArrayList<User> users = new ArrayList<>();
+        ArrayList<Add> countryList = new ArrayList<>();
         User userProfile = new User("username", "email@example.com", "1234567890", "password", true);
-        Add addingInfo = new Add("United States", 50, 20,250);
-        new LoginFrame(users);
+        
+        
+        new LoginFrame(users, countryList);
 
     }
 

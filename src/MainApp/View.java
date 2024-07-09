@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package MainApp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -39,11 +36,12 @@ public class View extends javax.swing.JFrame {
 
     private User userProfile;
     private ClimateAction climateAction;
-    ArrayList<Add> countryDataList = new ArrayList<>();
+    private ArrayList<Add> countryList = new ArrayList<>();
 
-    public View(User userProfile, ClimateAction action, Add addingInfo) {
+    public View(User userProfile, ClimateAction action, ArrayList<Add> countryList) {
         this.userProfile = userProfile;
         this.climateAction = action;
+        this.countryList = countryList;
 
         initComponents();
         loadContentIntoTextArea("src/textfiles/jTextArea1.txt", jTextArea1);
@@ -92,75 +90,36 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        searchinfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String country = JOptionPane.showInputDialog("Enter Country Name: ");
+
+                if (country != null && !country.isEmpty()) {
+                    Add result = Add.searchCountryInfo(countryList, country);
+                    if (result != null) {
+                        Add.showCountryInfoPanel(result);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No information found for country: " + country,
+                                "Search Result", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else if (country.equals("cancel")) {
+                    JOptionPane.showMessageDialog(null, "You have cancelled the action");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid country name.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+        });
+
         AddInfo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JPanel panel = new JPanel();
-                panel = new JPanel(new GridLayout(4, 2, 10, 10));
-                panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-                JLabel countryLabel = new JLabel("Country Name:");
-                countryLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-                JTextField countryField = new JTextField();
-                countryField.setFont(new Font("Arial", Font.PLAIN, 16));
-
-                panel.add(countryLabel);
-                panel.add(countryField);
-
-                JLabel numOfDeathsLabel = new JLabel("Number Of Deaths:");
-                numOfDeathsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-                JTextField numOfDeathsField = new JTextField();
-                numOfDeathsField.setFont(new Font("Arial", Font.PLAIN, 16));
-
-                panel.add(numOfDeathsLabel);
-                panel.add(numOfDeathsField);
-
-                JLabel numOfInjuredLabel = new JLabel("Number Of Injured:");
-                numOfInjuredLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-                JTextField numOfInjuredField = new JTextField();
-                numOfInjuredField.setFont(new Font("Arial", Font.PLAIN, 16));
-
-                panel.add(numOfInjuredLabel);
-                panel.add(numOfInjuredField);
-
-                JLabel missingPersonLabel = new JLabel("Number of Missing Person");
-                missingPersonLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-                JTextField missingPersonField = new JTextField();
-                missingPersonField.setFont(new Font("Arial", Font.BOLD, 16));
-
-                panel.add(missingPersonLabel);
-                panel.add(missingPersonField);
-
-                int option = JOptionPane.showConfirmDialog(null, panel, "Enter Information",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                if (option == JOptionPane.OK_OPTION) {
-                    String country = countryField.getText().trim();
-                    String numOfDeathsStr = numOfDeathsField.getText().trim();
-                    String numOfInjuredStr = numOfInjuredField.getText().trim();
-                    String missingPersonStr = missingPersonField.getText().trim();
-
-                    if (country.isEmpty() || numOfDeathsStr.isEmpty() || numOfInjuredStr.isEmpty() || missingPersonStr.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "All fields must be filled", "Input Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    try {
-                        country = countryField.getText();
-                        int numOfDeaths = Integer.parseInt(numOfDeathsStr);
-                        int numOfInjured = Integer.parseInt(numOfInjuredStr);
-                        int missingPerson = Integer.parseInt(missingPersonStr);
-
-                        Add addingInfo = new Add(country, numOfDeaths, numOfInjured, missingPerson);
-                        addingInfo.addInfoToCountryList();
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                Add info = Add.showAddInfoPanel();
+                if (info != null) {
+                    info.addInfoToCountryList(countryList);
+                    JOptionPane.showMessageDialog(null, "Information added successfully");
                 }
             }
         });
@@ -599,22 +558,7 @@ public class View extends javax.swing.JFrame {
     private void setupUIBasedOnUserRole() {
         if (userProfile != null) {
             boolean isAdmin = userProfile.getisAdmin();
-            if (isAdmin) {
-                ButtonEdit.setVisible(true);
-                ButtonSave.setVisible(true);
-                NewsEdit.setVisible(true);
-                NewsSave.setVisible(true);
-                EditNo.setVisible(true);
-                SaveNo.setVisible(true);
-                EditText.setVisible(true);
-                SaveText.setVisible(true);
-                EditText2.setVisible(true);
-                SaveText2.setVisible(true);
-                EditText3.setVisible(true);
-                SaveText3.setVisible(true);
-                enableTabManagement(true);
-                AddInfo.setVisible(true);
-            } else {
+            if (!isAdmin) {
                 ButtonEdit.setVisible(false);
                 ButtonSave.setVisible(false);
                 NewsEdit.setVisible(false);
@@ -766,6 +710,7 @@ public class View extends javax.swing.JFrame {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+        searchinfo = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane10 = new javax.swing.JScrollPane();
         jTextArea10 = new javax.swing.JTextArea();
@@ -1129,27 +1074,28 @@ public class View extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(NewsEdit)))
                                 .addGap(50, 50, 50)
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addComponent(ButtonEdit)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(ButtonSave))
-                                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(15, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(ButtonEdit)
+                .addGap(18, 18, 18)
+                .addComponent(ButtonSave)
+                .addGap(23, 23, 23))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonEdit)
+                    .addComponent(ButtonSave))
+                .addGap(3, 3, 3)
                 .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ButtonEdit)
-                        .addComponent(ButtonSave))
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(NewsEdit)
-                        .addComponent(jLabel1)))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(NewsEdit)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1399,6 +1345,11 @@ public class View extends javax.swing.JFrame {
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
         jLabel23.setText("Map of most affected areas");
 
+        searchinfo.setBackground(new java.awt.Color(72, 119, 62));
+        searchinfo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        searchinfo.setForeground(new java.awt.Color(255, 255, 255));
+        searchinfo.setText("Search");
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1413,7 +1364,7 @@ public class View extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -1421,50 +1372,52 @@ public class View extends javax.swing.JFrame {
                         .addGap(162, 162, 162))))
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel8Layout.createSequentialGroup()
-                            .addComponent(AddInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(EditNo)
-                            .addGap(18, 18, 18)
-                            .addComponent(SaveNo))
-                        .addGroup(jPanel8Layout.createSequentialGroup()
-                            .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(40, 40, 40)
-                            .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(40, 40, 40)
-                            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(40, 40, 40)
-                            .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(40, 40, 40)
-                            .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 21, Short.MAX_VALUE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 21, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(AddInfo)
+                        .addGap(18, 18, 18)
+                        .addComponent(EditNo)
+                        .addGap(18, 18, 18)
+                        .addComponent(SaveNo)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchinfo)
+                        .addGap(31, 31, 31))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(373, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(EditNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SaveNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(AddInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(EditNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SaveNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(27, 27, 27)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1784,7 +1737,7 @@ public class View extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(78, 78, 78)
                         .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(321, Short.MAX_VALUE))
         );
@@ -1958,5 +1911,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea7;
     private javax.swing.JTextArea jTextArea8;
     private javax.swing.JTextArea jTextArea9;
+    private javax.swing.JButton searchinfo;
     // End of variables declaration//GEN-END:variables
 }

@@ -46,7 +46,7 @@ public class ClimateAction {
         if (isAdmin) {
             buttons = new String[]{
                 "DASHBOARD", "VIEW",
-                "EMERGENCY HOTLINE", "USER FEEDBACK", "PROFILE", "LOGOUT"
+                "EMERGENCY HOTLINE", "USER REQUEST", "PROFILE", "LOGOUT"
             };
         } else {
             buttons = new String[]{
@@ -97,7 +97,7 @@ public class ClimateAction {
                         profile = new Profile(UserProfile, ClimateAction.this);
                     }
                     break;
-                case "USER FEEDBACK":
+                case "USER REQUEST":
                     break;
                 case "SHARE":
                     new Share(ClimateAction.this);

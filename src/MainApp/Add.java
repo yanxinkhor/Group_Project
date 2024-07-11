@@ -66,7 +66,7 @@ public class Add {
     public void addInfoToCountryList(ArrayList<Add> countryList) {
         countryList.add(this);
     }
-    
+
     public void setDisasterType(String disasterType) {
         this.disasterType = disasterType;
     }
@@ -82,7 +82,6 @@ public class Add {
     public void setMissingPerson(int missingPerson) {
         this.missingPerson = missingPerson;
     }
-
 
     public static Add showAddInfoPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
@@ -215,7 +214,6 @@ public class Add {
                 numOfDeathField.setEditable(true);
                 numOfInjuredField.setEditable(true);
                 missingPersonField.setEditable(true);
-                totalAffectedField.setEditable(false);
             }
         });
 
@@ -230,20 +228,24 @@ public class Add {
                     int missingPerson = Integer.parseInt(missingPersonField.getText().trim());
                     int totalAffected = numOfDeaths + numOfInjured + missingPerson;
 
-                    // Update the countryInfo object
                     countryInfo.setCountry(country);
                     countryInfo.setDisasterType(disasterType);
                     countryInfo.setNumOfDeaths(numOfDeaths);
                     countryInfo.setNumOfInjured(numOfInjured);
                     countryInfo.setMissingPerson(missingPerson);
 
-                    // Update the total affected field
                     totalAffectedField.setText(String.valueOf(totalAffected));
 
                     JOptionPane.showMessageDialog(null, "Information updated successfully", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
                 }
+
+                countryField.setEditable(false);
+                typeField.setEditable(false);
+                numOfDeathField.setEditable(false);
+                numOfInjuredField.setEditable(false);
+                missingPersonField.setEditable(false);
             }
         });
 

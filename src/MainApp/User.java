@@ -13,7 +13,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.gender = gender;
         this.password = password;
         this.isAdmin = isAdmin;
     }
@@ -58,16 +57,12 @@ public class User {
         this.password = password;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
     boolean isAdmin() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 }

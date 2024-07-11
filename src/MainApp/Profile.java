@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Profile extends JFrame {
-    
     private User user;
     JLabel usernameLabel;
     JLabel emailLabel;
@@ -25,7 +24,7 @@ public class Profile extends JFrame {
         this.action = action;
         
         setSize(400,250);
-        setLocation(450,220);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         

@@ -13,7 +13,7 @@ public class ClimateAction {
     ImageIcon imageIcon;
     JLabel imageLabel;
     ArrayList<User> users;
-    Profile profileWindow;
+    Profile profile;
     User UserProfile;
     ArrayList<Add> countryList;
     
@@ -24,10 +24,10 @@ public class ClimateAction {
         this.countryList = countryList;
 
         frame = new JFrame("Climate Action");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(897, 545);
         frame.setLayout(new BorderLayout());
-        frame.setLocation(150, 100);
+        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
 
@@ -46,12 +46,12 @@ public class ClimateAction {
         if (isAdmin) {
             buttons = new String[]{
                 "DASHBOARD", "VIEW",
-                "WEATHER", "USER FEEDBACK", "PROFILE", "LOGOUT"
+                "EMERGENCY HOTLINE", "USER FEEDBACK", "PROFILE", "LOGOUT"
             };
         } else {
             buttons = new String[]{
                 "DASHBOARD", "VIEW",
-                "WEATHER", "PROFILE", "SHARE", "LOGOUT"
+                "EMERGENCY HOTLINE", "PROFILE", "SHARE", "LOGOUT"
             };
         }
 
@@ -75,9 +75,9 @@ public class ClimateAction {
             JButton source = (JButton) e.getSource();
             String action = source.getText();
 
-            if (profileWindow != null) {
-                profileWindow.dispose();
-                profileWindow = null;
+            if (profile != null) {
+                profile.dispose();
+                profile= null;
             }
 
             switch (action) {
@@ -88,12 +88,13 @@ public class ClimateAction {
                     ViewFrame.setVisible(true);
                     break;
 
-                case "WEATHER":
+                case "EMERGENCY HOTLINE":
+                    new Emergency();
                     break;
 
                 case "PROFILE":
                     if (UserProfile != null) {
-                        profileWindow = new Profile(UserProfile, ClimateAction.this);
+                        profile = new Profile(UserProfile, ClimateAction.this);
                     }
                     break;
                 case "USER FEEDBACK":
@@ -107,9 +108,6 @@ public class ClimateAction {
                     new LoginFrame(users,countryList);
                     break;
 
-                default:
-
-                    break;
             }
         }
     }
@@ -121,8 +119,6 @@ public class ClimateAction {
     public static void main(String[] args) {
         ArrayList<User> users = new ArrayList<>();
         ArrayList<Add> countryList = new ArrayList<>();
-        User userProfile = new User("username", "email@example.com", "1234567890", "password", true);
-        
         
         new LoginFrame(users, countryList);
 

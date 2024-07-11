@@ -1,38 +1,19 @@
 package MainApp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.JTextField;
 
 public class View extends javax.swing.JFrame {
-
-    private boolean textChanged = false;
-    private boolean isEditable = false;
 
     private User userProfile;
     private ClimateAction climateAction;
@@ -61,41 +42,22 @@ public class View extends javax.swing.JFrame {
         loadContentIntoTextArea("src/textfiles/jTextArea15.txt", jTextArea15);
         setupUIBasedOnUserRole();
 
-        jTabbedPane1.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                if (SwingUtilities.isRightMouseButton(evt) && evt.getClickCount() == 1) {
-                    int selectedIndex = jTabbedPane1.getSelectedIndex();
-                    int lastIndex = jTabbedPane1.getTabCount() - 1;
-
-                    if (selectedIndex >= 0 && selectedIndex < lastIndex) {
-                        JTabbedPane tabbedPane = (JTabbedPane) evt.getSource();
-
-                        JPopupMenu popupMenu = new JPopupMenu();
-
-                        JMenuItem deleteMenuItem = new JMenuItem("Delete Tab");
-                        deleteMenuItem.addActionListener(e -> {
-                            int option = JOptionPane.showConfirmDialog(View.this,
-                                    "Are you sure you want to delete this tab?", "Confirm Deletion",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (option == JOptionPane.YES_OPTION) {
-                                tabbedPane.removeTabAt(selectedIndex);
-                            }
-                        });
-
-                        popupMenu.add(deleteMenuItem);
-
-                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-                    }
-                }
-            }
-        });
+        ButtonSave.setEnabled(false);
+        NewsSave.setEnabled(false);
+        SaveNo.setEnabled(false);
+        SaveText.setEnabled(false);
+        SaveText2.setEnabled(false);
+        SaveText3.setEnabled(false);
 
         searchinfo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 String country = JOptionPane.showInputDialog("Enter Country Name: ");
 
-                if (country != null && !country.isEmpty()) {
+                if (country == null) {
+                    JOptionPane.showMessageDialog(null, "You've cancelled the action.", "Cancelled", JOptionPane.INFORMATION_MESSAGE);
+                } else if (!country.isEmpty()) {
                     Add result = Add.searchCountryInfo(countryList, country);
                     if (result != null) {
                         Add.showCountryInfoPanel(result);
@@ -103,8 +65,6 @@ public class View extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "No information found for country: " + country,
                                 "Search Result", JOptionPane.WARNING_MESSAGE);
                     }
-                } else if (country.equals("cancel")) {
-                    JOptionPane.showMessageDialog(null, "You have cancelled the action");
                 } else {
                     JOptionPane.showMessageDialog(null, "Please enter a valid country name.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -127,6 +87,7 @@ public class View extends javax.swing.JFrame {
         EditText2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jTextArea10.setEditable(true);
+                SaveText2.setEnabled(true);
             }
         });
 
@@ -135,34 +96,16 @@ public class View extends javax.swing.JFrame {
                 String editedText10 = jTextArea10.getText();
                 jTextArea10.setText(editedText10);
                 saveContentToFile("src/textfiles/jTextArea10.txt", jTextArea10);
-                SaveButtonStatus();
+                SaveText2.setEnabled(false);
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
-        });
-
-        jTextArea10.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
         });
 
         EditText.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jTextArea9.setEditable(true);
                 jTextArea14.setEditable(true);
+                SaveText.setEnabled(true);
             }
         });
 
@@ -176,53 +119,16 @@ public class View extends javax.swing.JFrame {
                 jTextArea14.setEditable(false);
                 saveContentToFile("src/textfiles/jTextArea9.txt", jTextArea9);
                 saveContentToFile("src/textfiles/jTextArea14.txt", jTextArea14);
-                SaveButtonStatus();
+                SaveText.setEnabled(false);
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
-        });
-
-        jTextArea9.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea14.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
         });
 
         EditText3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 jTextArea11.setEditable(true);
                 jTextArea15.setEditable(true);
+                SaveText3.setEnabled(true);
             }
         });
 
@@ -236,47 +142,9 @@ public class View extends javax.swing.JFrame {
                 jTextArea15.setEditable(false);
                 saveContentToFile("src/textfiles/jTextArea11.txt", jTextArea11);
                 saveContentToFile("src/textfiles/jTextArea15.txt", jTextArea15);
-                SaveButtonStatus();
+                SaveText3.setEnabled(false);
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
-        });
-
-        jTextArea11.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea13.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
         });
 
         EditNo.addActionListener(new ActionListener() {
@@ -286,6 +154,7 @@ public class View extends javax.swing.JFrame {
                 jTextArea7.setEditable(true);
                 jTextArea8.setEditable(true);
                 jTextArea13.setEditable(true);
+                SaveNo.setEnabled(true);
             }
         });
         SaveNo.addActionListener(new ActionListener() {
@@ -310,104 +179,9 @@ public class View extends javax.swing.JFrame {
                 saveContentToFile("src/textfiles/jTextArea7.txt", jTextArea7);
                 saveContentToFile("src/textfiles/jTextArea8.txt", jTextArea8);
                 saveContentToFile("src/textfiles/jTextArea13.txt", jTextArea13);
-                SaveButtonStatus();
+                SaveNo.setEnabled(false);
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
-        });
-
-        jTextArea2.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea6.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea7.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea8.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
-        });
-
-        jTextArea13.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-
         });
 
         NewsEdit.addActionListener(new ActionListener() {
@@ -416,6 +190,7 @@ public class View extends javax.swing.JFrame {
                 jTextArea4.setEditable(true);
                 jTextArea5.setEditable(true);
                 jTextArea3.setEditable(true);
+                NewsSave.setEnabled(true);
             }
         });
         NewsSave.addActionListener(new ActionListener() {
@@ -432,87 +207,12 @@ public class View extends javax.swing.JFrame {
                 String editedText3 = jTextArea3.getText();
                 jTextArea3.setEditable(false);
                 jTextArea3.setText(editedText3);
-                textChanged = false;
                 saveContentToFile("src/textfiles/jTextArea1.txt", jTextArea1);
                 saveContentToFile("src/textfiles/jTextArea4.txt", jTextArea4);
                 saveContentToFile("src/textfiles/jTextArea5.txt", jTextArea5);
                 saveContentToFile("src/textfiles/jTextArea3.txt", jTextArea3);
-                SaveButtonStatus();
+                NewsSave.setEnabled(false);
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
-            }
-        });
-
-        jTextArea1.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-        });
-
-        jTextArea4.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-        });
-        jTextArea5.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-        });
-        jTextArea3.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
             }
         });
 
@@ -520,6 +220,7 @@ public class View extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jTextArea12.setEditable(true);
+                ButtonSave.setEnabled(true);
             }
         });
 
@@ -528,31 +229,12 @@ public class View extends javax.swing.JFrame {
                 String editedText = jTextArea12.getText();
                 jTextArea12.setText(editedText);
                 jTextArea12.setEditable(false);
-                textChanged = false;
+                ButtonSave.setEnabled(false);
                 saveContentToFile("src/textfiles/jTextArea12.txt", jTextArea12);
-                SaveButtonStatus();
                 JOptionPane.showMessageDialog(View.this, "Changes saved.");
             }
         });
 
-        jTextArea12.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                textChanged = true;
-                SaveButtonStatus();
-            }
-        });
-        SaveButtonStatus();
     }
 
     private void setupUIBasedOnUserRole() {
@@ -571,28 +253,9 @@ public class View extends javax.swing.JFrame {
                 SaveText2.setVisible(false);
                 EditText3.setVisible(false);
                 SaveText3.setVisible(false);
-                enableTabManagement(false);
                 AddInfo.setVisible(false);
             }
         }
-    }
-
-    private void enableTabManagement(boolean enabled) {
-        int lastIndex = jTabbedPane1.getTabCount() - 1;
-        if (enabled) {
-            jTabbedPane1.setEnabledAt(lastIndex, true);
-        } else {
-            jTabbedPane1.setEnabledAt(lastIndex, false);
-        }
-    }
-
-    private void SaveButtonStatus() {
-        ButtonSave.setEnabled(textChanged);
-        NewsSave.setEnabled(textChanged);
-        SaveNo.setEnabled(textChanged);
-        SaveText.setEnabled(textChanged);
-        SaveText2.setEnabled(textChanged);
-        SaveText3.setEnabled(textChanged);
     }
 
     public static void loadContentIntoTextArea(String filePath, JTextArea textArea) {
@@ -626,18 +289,10 @@ public class View extends javax.swing.JFrame {
         }
     }
 
-    public void close() {
-        this.dispose();
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -740,18 +395,11 @@ public class View extends javax.swing.JFrame {
         jTextArea15 = new javax.swing.JTextArea();
         EditText3 = new javax.swing.JButton();
         SaveText3 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-
-        jMenuItem1.setText("jMenuItem1");
-
-        jMenuItem2.setText("jMenuItem2");
-
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(700, 450));
+        setResizable(false);
         setSize(new java.awt.Dimension(1199, 811));
 
         jPanel1.setBackground(new java.awt.Color(72, 119, 62));
@@ -1102,9 +750,9 @@ public class View extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(NewsSave)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Introduction", jPanel7);
@@ -1156,6 +804,7 @@ public class View extends javax.swing.JFrame {
         jPanel18.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel18.setMaximumSize(new java.awt.Dimension(127, 169));
         jPanel18.setMinimumSize(new java.awt.Dimension(127, 169));
+        jPanel18.setPreferredSize(new java.awt.Dimension(127, 169));
 
         jLabel18.setFont(new java.awt.Font("Impact", 0, 20)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
@@ -1179,7 +828,7 @@ public class View extends javax.swing.JFrame {
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1388,13 +1037,13 @@ public class View extends javax.swing.JFrame {
                                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 21, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(AddInfo)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(EditNo)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SaveNo)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AddInfo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchinfo)
                         .addGap(31, 31, 31))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
@@ -1413,11 +1062,11 @@ public class View extends javax.swing.JFrame {
                             .addComponent(SaveNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(searchinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AddInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1583,11 +1232,11 @@ public class View extends javax.swing.JFrame {
                             .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel9Layout.createSequentialGroup()
                                 .addComponent(jLabel27)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 1, Short.MAX_VALUE))))
+                        .addGap(0, 10, Short.MAX_VALUE))))
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(194, 194, 194)
                 .addComponent(jLabel26)
@@ -1699,21 +1348,6 @@ public class View extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Disaster Mitigation", jPanel6);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 867, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 506, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("+", jPanel5);
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1721,11 +1355,11 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel2)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1735,11 +1369,11 @@ public class View extends javax.swing.JFrame {
                         .addGap(51, 51, 51)
                         .addComponent(jLabel2))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(321, Short.MAX_VALUE))
+                .addContainerGap(379, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1747,25 +1381,26 @@ public class View extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(84, 84, 84))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setSize(new java.awt.Dimension(1163, 738));
+        setSize(new java.awt.Dimension(1174, 710));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     public void changecolor(JPanel hover, Color rand) {
         hover.setBackground(rand);
     }
-
 
     private void BackArrowMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackArrowMouseEntered
         changecolor(jPanel2, new Color(84, 140, 72));
@@ -1776,36 +1411,12 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_BackArrowMouseExited
 
     private void BackArrowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackArrowMouseClicked
-        close();
+        this.dispose();
         climateAction.getFrame().setVisible(true);
-
     }//GEN-LAST:event_BackArrowMouseClicked
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        int lastIndex = jTabbedPane1.getTabCount() - 1;
-        if (jTabbedPane1.getSelectedIndex() == lastIndex) {
 
-            String tabName;
-            while (true) {
-                tabName = JOptionPane.showInputDialog("Enter a tab name");
-
-                if (tabName == null) {
-                    JOptionPane.showMessageDialog(this, "Action cancelled");
-                    break;
-
-                } else if (tabName.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Please enter a tab name");
-                } else {
-                    JLabel tabTitleLabel = new JLabel(tabName);
-                    JTextArea textArea = new JTextArea();
-
-                    jTabbedPane1.insertTab(tabName, null, new JScrollPane(textArea), null, lastIndex);
-                    jTabbedPane1.setTabComponentAt(lastIndex, tabTitleLabel);
-                    jTabbedPane1.setSelectedIndex(lastIndex);
-                    break;
-                }
-            }
-        }
 
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
@@ -1825,8 +1436,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JButton SaveText;
     private javax.swing.JButton SaveText2;
     private javax.swing.JButton SaveText3;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1860,8 +1469,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1875,7 +1482,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;

@@ -6,7 +6,6 @@ import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class Add {
 
     private String country;
@@ -49,8 +48,8 @@ public class Add {
     public String getDisasterType() {
         return disasterType;
     }
-    
-    public void setCountry(String country){
+
+    public void setCountry(String country) {
         this.country = country;
     }
 
@@ -68,6 +67,23 @@ public class Add {
         countryList.add(this);
     }
     
+    public void setDisasterType(String disasterType) {
+        this.disasterType = disasterType;
+    }
+
+    public void setNumOfDeaths(int numOfDeaths) {
+        this.numOfDeaths = numOfDeaths;
+    }
+
+    public void setNumOfInjured(int numOfInjured) {
+        this.numOfInjured = numOfInjured;
+    }
+
+    public void setMissingPerson(int missingPerson) {
+        this.missingPerson = missingPerson;
+    }
+
+
     public static Add showAddInfoPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -83,7 +99,9 @@ public class Add {
 
         JLabel disasterTypeLabel = new JLabel("Disaster Type:");
         disasterTypeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        String[] disasterTypes = {"Select Disaster Type", "Earthquake", "Flood", "Hurricane", "Wildfire", "Tornado", "Tsunami", "Volcanic Eruption", "Landslide", "Drought"};
+        String[] disasterTypes = {"Select Disaster Type", "Earthquake", "Flood",
+            "Hurricane", "Wildfire", "Tornado",
+            "Tsunami", "Volcanic Eruption", "Landslide", "Drought"};
 
         JComboBox<String> disasterTypeDropdown = new JComboBox<>(disasterTypes);
         disasterTypeDropdown.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -146,7 +164,7 @@ public class Add {
     }
 
     public static void showCountryInfoPanel(Add countryInfo) {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel countryLabel = new JLabel("Country Name: ");
@@ -172,7 +190,7 @@ public class Add {
         numOfInjuredField.setEditable(false);
         panel.add(numOfInjuredLabel);
         panel.add(numOfInjuredField);
-        
+
         JLabel missingPersonLabel = new JLabel("Number of Missing: ");
         JTextField missingPersonField = new JTextField(String.valueOf(countryInfo.getMissingPerson()));
         missingPersonField.setEditable(false);
@@ -184,11 +202,53 @@ public class Add {
         totalAffectedField.setEditable(false);
         panel.add(totalAffectedLabel);
         panel.add(totalAffectedField);
-        
+
         JButton edit = new JButton("Edit");
-        
-        
-        
+        edit.setBounds(12, 30, 80, 30);
+        JButton update = new JButton("Update");
+        update.setBounds(12, 30, 80, 30);
+
+        edit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                countryField.setEditable(true);
+                typeField.setEditable(true);
+                numOfDeathField.setEditable(true);
+                numOfInjuredField.setEditable(true);
+                missingPersonField.setEditable(true);
+                totalAffectedField.setEditable(false);
+            }
+        });
+
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String country = countryField.getText().trim();
+                    String disasterType = typeField.getText().trim();
+                    int numOfDeaths = Integer.parseInt(numOfDeathField.getText().trim());
+                    int numOfInjured = Integer.parseInt(numOfInjuredField.getText().trim());
+                    int missingPerson = Integer.parseInt(missingPersonField.getText().trim());
+                    int totalAffected = numOfDeaths + numOfInjured + missingPerson;
+
+                    // Update the countryInfo object
+                    countryInfo.setCountry(country);
+                    countryInfo.setDisasterType(disasterType);
+                    countryInfo.setNumOfDeaths(numOfDeaths);
+                    countryInfo.setNumOfInjured(numOfInjured);
+                    countryInfo.setMissingPerson(missingPerson);
+
+                    // Update the total affected field
+                    totalAffectedField.setText(String.valueOf(totalAffected));
+
+                    JOptionPane.showMessageDialog(null, "Information updated successfully", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        panel.add(edit);
+        panel.add(update);
 
         JOptionPane.showMessageDialog(null, panel, "Country Information", JOptionPane.INFORMATION_MESSAGE);
     }

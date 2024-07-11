@@ -27,7 +27,7 @@ public class SignupFrame implements ActionListener {
     ArrayList<User> users;
     ArrayList<Add> countryList;
 
-    public SignupFrame(ArrayList<User> users,ArrayList<Add> countryList) {
+    public SignupFrame(ArrayList<User> users, ArrayList<Add> countryList) {
         frame = new JFrame("Signup");
         this.users = users;
         this.countryList = countryList;
@@ -38,34 +38,35 @@ public class SignupFrame implements ActionListener {
         usernameField.setBounds(300, 100, 220, 25);
         frame.add(usernameLabel);
         frame.add(usernameField);
-        
+
         emailLabel = new JLabel("Email:");
         emailLabel.setBounds(200, 150, 75, 25);
         emailField = new JTextField();
         emailField.setBounds(300, 150, 220, 25);
         frame.add(emailLabel);
         frame.add(emailField);
-        
+
         phoneNumberLabel = new JLabel("Phone No:");
         phoneNumberLabel.setBounds(200, 200, 75, 25);
         phoneNumberField = new JTextField();
         phoneNumberField.setBounds(300, 200, 220, 25);
         frame.add(phoneNumberLabel);
         frame.add(phoneNumberField);
-        
+
         passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(200, 250, 75, 25);
         passwordField = new JPasswordField();
         passwordField.setEchoChar('*');
         passwordField.setBounds(300, 250, 220, 25);
         frame.add(passwordLabel);
-        frame.add(passwordField);emailLabel = new JLabel("Email:");
-        
+        frame.add(passwordField);
+        emailLabel = new JLabel("Email:");
+
         showPassword = new JCheckBox();
         showPassword.setBounds(520, 250, 150, 25);
         showPassword.addActionListener(this);
         frame.add(showPassword);
-       
+
         AdminButton = new JRadioButton("Admin");
         AdminButton.setBounds(325, 300, 100, 25);
         frame.add(AdminButton);
@@ -73,29 +74,29 @@ public class SignupFrame implements ActionListener {
         UserButton = new JRadioButton("User");
         UserButton.setBounds(425, 300, 100, 25);
         frame.add(UserButton);
-        
+
         roleLabel = new JLabel("Roles");
-        roleLabel.setBounds(200,300,75,25);
+        roleLabel.setBounds(200, 300, 75, 25);
         ButtonGroup group = new ButtonGroup();
         group.add(AdminButton);
         group.add(UserButton);
         frame.add(roleLabel);
-        
-        signupButton = new JButton("SIGNUP");
+
+        signupButton = new JButton("CREATE");
         signupButton.setBounds(300, 350, 100, 25);
         signupButton.addActionListener(this);
         frame.add(signupButton);
-        
+
         BackButton = new JButton("BACK");
         BackButton.setBounds(410, 350, 100, 25);
         BackButton.addActionListener(this);
         frame.add(BackButton);
-        
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 450);
         frame.setLayout(null);
         frame.setResizable(false);
-        frame.setLocation(280,150);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
@@ -108,7 +109,7 @@ public class SignupFrame implements ActionListener {
             boolean isAdmin = AdminButton.isSelected();
 
             if (username.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()
-                ||(!AdminButton.isSelected()&& !UserButton.isSelected())) {
+                    || (!AdminButton.isSelected() && !UserButton.isSelected())) {
                 JOptionPane.showMessageDialog(frame, "Please fill in all fields.");
 
             } else {
@@ -121,32 +122,32 @@ public class SignupFrame implements ActionListener {
                 }
 
                 if (!userExists) {
-                    
+
                     User user;
-                    if(isAdmin){
-                         Admin admin = new Admin(username, email, phoneNumber, password);
-                         users.add(admin);  
-                    }else{
+                    if (isAdmin) {
+                        Admin admin = new Admin(username, email, phoneNumber, password);
+                        users.add(admin);
+                    } else {
                         NormalUser normalUser = new NormalUser(username, email, phoneNumber, password);
                         users.add(normalUser);
                     }
                     JOptionPane.showMessageDialog(null, "Sign Up Successfully");
-                    new LoginFrame(users,countryList);
+                    new LoginFrame(users, countryList);
                     frame.setVisible(false);
                 }
             }
 
-        } else if(e.getSource() == showPassword){
-            
-            if(showPassword.isSelected()){
+        } else if (e.getSource() == showPassword) {
+
+            if (showPassword.isSelected()) {
                 passwordField.setEchoChar((char) 0);
-            }else{
+            } else {
                 passwordField.setEchoChar('*');
             }
-            
-        }else if (e.getSource() == BackButton) {
+
+        } else if (e.getSource() == BackButton) {
             frame.setVisible(false);
-            new LoginFrame(users,countryList);
+            new LoginFrame(users, countryList);
         }
     }
 

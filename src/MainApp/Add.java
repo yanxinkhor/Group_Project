@@ -14,6 +14,7 @@ public class Add {
     private int missingPerson;
     private int totalAffected;
     private String disasterType;
+    private User currentUser;
 
     public Add(String country, int numOfDeaths, int numOfInjured, int missingPerson, String disasterType) {
         this.country = country;
@@ -165,7 +166,7 @@ public class Add {
         return null;
     }
 
-    public static void showCountryInfoPanel(Add countryInfo) {
+    public static void showCountryInfoPanel(Add countryInfo, User user) {
         JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -205,55 +206,57 @@ public class Add {
         panel.add(totalAffectedLabel);
         panel.add(totalAffectedField);
 
-        JButton edit = new JButton("Edit");
-        edit.setBounds(12, 30, 80, 30);
-        JButton update = new JButton("Update");
-        update.setBounds(12, 30, 80, 30);
+        boolean isAdmin = user != null && user.getisAdmin();
+        if (isAdmin) {
+            JButton edit = new JButton("Edit");
+            JButton update = new JButton("Update");
+            update.setBounds(12, 30, 80, 30);
 
-        edit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                countryField.setEditable(true);
-                typeField.setEditable(true);
-                numOfDeathField.setEditable(true);
-                numOfInjuredField.setEditable(true);
-                missingPersonField.setEditable(true);
-            }
-        });
-
-        update.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String country = countryField.getText().trim();
-                    String disasterType = typeField.getText().trim();
-                    int numOfDeaths = Integer.parseInt(numOfDeathField.getText().trim());
-                    int numOfInjured = Integer.parseInt(numOfInjuredField.getText().trim());
-                    int missingPerson = Integer.parseInt(missingPersonField.getText().trim());
-                    int totalAffected = numOfDeaths + numOfInjured + missingPerson;
-
-                    countryInfo.setCountry(country);
-                    countryInfo.setDisasterType(disasterType);
-                    countryInfo.setNumOfDeaths(numOfDeaths);
-                    countryInfo.setNumOfInjured(numOfInjured);
-                    countryInfo.setMissingPerson(missingPerson);
-
-                    totalAffectedField.setText(String.valueOf(totalAffected));
-
-                    JOptionPane.showMessageDialog(null, "Information updated successfully", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
+            edit.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    countryField.setEditable(true);
+                    typeField.setEditable(true);
+                    numOfDeathField.setEditable(true);
+                    numOfInjuredField.setEditable(true);
+                    missingPersonField.setEditable(true);
                 }
+            });
 
-                countryField.setEditable(false);
-                typeField.setEditable(false);
-                numOfDeathField.setEditable(false);
-                numOfInjuredField.setEditable(false);
-                missingPersonField.setEditable(false);
-            }
-        });
+            update.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        String country = countryField.getText().trim();
+                        String disasterType = typeField.getText().trim();
+                        int numOfDeaths = Integer.parseInt(numOfDeathField.getText().trim());
+                        int numOfInjured = Integer.parseInt(numOfInjuredField.getText().trim());
+                        int missingPerson = Integer.parseInt(missingPersonField.getText().trim());
+                        int totalAffected = numOfDeaths + numOfInjured + missingPerson;
 
-        panel.add(edit);
-        panel.add(update);
+                        countryInfo.setCountry(country);
+                        countryInfo.setDisasterType(disasterType);
+                        countryInfo.setNumOfDeaths(numOfDeaths);
+                        countryInfo.setNumOfInjured(numOfInjured);
+                        countryInfo.setMissingPerson(missingPerson);
+
+                        totalAffectedField.setText(String.valueOf(totalAffected));
+
+                        JOptionPane.showMessageDialog(null, "Information updated successfully", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Please enter valid numbers for deaths, injured, and missing persons", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    countryField.setEditable(false);
+                    typeField.setEditable(false);
+                    numOfDeathField.setEditable(false);
+                    numOfInjuredField.setEditable(false);
+                    missingPersonField.setEditable(false);
+                }
+            });
+
+            panel.add(edit);
+            panel.add(update);
+        }
 
         JOptionPane.showMessageDialog(null, panel, "Country Information", JOptionPane.INFORMATION_MESSAGE);
     }

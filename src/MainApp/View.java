@@ -60,7 +60,7 @@ public class View extends javax.swing.JFrame {
                 } else if (!country.isEmpty()) {
                     Add result = Add.searchCountryInfo(countryList, country);
                     if (result != null) {
-                        Add.showCountryInfoPanel(result);
+                        Add.showCountryInfoPanel(result,userProfile);
                     } else {
                         JOptionPane.showMessageDialog(null, "No information found for country: " + country,
                                 "Search Result", JOptionPane.WARNING_MESSAGE);

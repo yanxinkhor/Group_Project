@@ -11,7 +11,11 @@ public class LoginFrame implements ActionListener {
     private User UserProfile;
     private ArrayList<User> users;
 
+
     ArrayList<Add> countryList;
+    ArrayList<String> emergencyList;
+    ArrayList<String> resourceList;
+    Share share;
     JFrame frame;
     JButton LoginBtn;
     JButton SignupBtn;
@@ -25,12 +29,16 @@ public class LoginFrame implements ActionListener {
     JRadioButton UserBtn;
     JCheckBox showPassword;
 
-    public LoginFrame(ArrayList<User> users, ArrayList<Add> countryList) {
+    public LoginFrame(ArrayList<User> users, ArrayList<Add> countryList,ArrayList<String> emergencyList,ArrayList<String> resourceList ) {
 
         this.users = users;
         this.countryList = countryList;
+        this.emergencyList = emergencyList;
+        this.resourceList = resourceList;
+        
+        
+        
         frame = new JFrame();
-
         LoginBtn = new JButton("Login");
         SignupBtn = new JButton("Signup");
         username = new JTextField();
@@ -113,14 +121,14 @@ public class LoginFrame implements ActionListener {
                         found = true;
                         UserProfile = user;
                         JOptionPane.showMessageDialog(null, "Welcome Admin:" + user.getUsername());
-                        new ClimateAction(true, users, UserProfile, countryList);
+                        new ClimateAction(users, UserProfile, countryList, emergencyList,resourceList);
                         frame.dispose();
                         break;
                     } else if (UserBtn.isSelected() && !user.getisAdmin()) {
                         found = true;
                         UserProfile = user;
                         JOptionPane.showMessageDialog(null, "Welcome User:" + user.getUsername());
-                        new ClimateAction(false, users, UserProfile, countryList);
+                        new ClimateAction(users, UserProfile, countryList, emergencyList,resourceList);
                         frame.dispose();
                         break;
                     } else {
@@ -142,7 +150,7 @@ public class LoginFrame implements ActionListener {
             }
 
         } else if (e.getSource() == SignupBtn) {
-            new SignupFrame(users, countryList);
+            new SignupFrame(users, countryList,emergencyList,resourceList);
             frame.setVisible(false);
         }
     }

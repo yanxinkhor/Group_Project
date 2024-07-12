@@ -113,6 +113,7 @@ public class Add {
 
         JTextField numOfDeathsField = new JTextField();
         numOfDeathsField.setFont(new Font("Arial", Font.PLAIN, 16));
+        numOfDeathsField.setBorder(null);
 
         panel.add(numOfDeathsLabel);
         panel.add(numOfDeathsField);
@@ -122,6 +123,7 @@ public class Add {
 
         JTextField numOfInjuredField = new JTextField();
         numOfInjuredField.setFont(new Font("Arial", Font.PLAIN, 16));
+        numOfInjuredField.setBorder(null);
 
         panel.add(numOfInjuredLabel);
         panel.add(numOfInjuredField);
@@ -131,6 +133,7 @@ public class Add {
 
         JTextField missingPersonField = new JTextField();
         missingPersonField.setFont(new Font("Arial", Font.PLAIN, 16));
+        missingPersonField.setBorder(null);
 
         panel.add(missingPersonLabel);
         panel.add(missingPersonField);

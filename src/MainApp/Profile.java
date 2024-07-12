@@ -112,7 +112,7 @@ public class Profile extends JFrame {
         }
    }
        public boolean isAdmin() {
-        return user.isAdmin();
+        return user.getisAdmin();
     }
    
 }

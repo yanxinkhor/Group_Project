@@ -26,11 +26,18 @@ public class SignupFrame implements ActionListener {
 
     ArrayList<User> users;
     ArrayList<Add> countryList;
+    ArrayList<String> EmergencyList;
+    ArrayList<String> ResourceList;
 
-    public SignupFrame(ArrayList<User> users, ArrayList<Add> countryList) {
+
+    public SignupFrame(ArrayList<User> users, ArrayList<Add> countryList,ArrayList<String> EmergencyList,ArrayList<String> ResourceList) {
         frame = new JFrame("Signup");
         this.users = users;
         this.countryList = countryList;
+        this.EmergencyList = EmergencyList;
+        this.ResourceList = ResourceList;
+        
+        
 
         usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(200, 100, 75, 25);
@@ -132,7 +139,7 @@ public class SignupFrame implements ActionListener {
                         users.add(normalUser);
                     }
                     JOptionPane.showMessageDialog(null, "Sign Up Successfully");
-                    new LoginFrame(users, countryList);
+                    new LoginFrame(users, countryList,EmergencyList,ResourceList);
                     frame.setVisible(false);
                 }
             }
@@ -147,7 +154,7 @@ public class SignupFrame implements ActionListener {
 
         } else if (e.getSource() == BackButton) {
             frame.setVisible(false);
-            new LoginFrame(users, countryList);
+            new LoginFrame(users, countryList,EmergencyList,ResourceList);
         }
     }
 

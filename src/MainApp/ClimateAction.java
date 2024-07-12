@@ -13,15 +13,19 @@ public class ClimateAction {
     ImageIcon imageIcon;
     JLabel imageLabel;
     ArrayList<User> users;
+    ArrayList<Add> countryList;
+    ArrayList<String> emergencyList;
+    ArrayList<String> resourceList;
     Profile profile;
     User UserProfile;
-    ArrayList<Add> countryList;
-    
+    Share share;
 
-    public ClimateAction(boolean isAdmin, ArrayList<User> users, User UserProfile,ArrayList<Add> countryList ) {
+    public ClimateAction(ArrayList<User> users, User UserProfile, ArrayList<Add> countryList, ArrayList<String> emergencyList, ArrayList<String> resourceList) {
         this.users = users;
         this.UserProfile = UserProfile;
         this.countryList = countryList;
+        this.emergencyList = emergencyList;
+        this.resourceList = resourceList;
 
         frame = new JFrame("Climate Action");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,17 +47,10 @@ public class ClimateAction {
 
         String[] buttons;
 
-        if (isAdmin) {
-            buttons = new String[]{
-                "DASHBOARD", "VIEW",
-                "EMERGENCY HOTLINE", "USER REQUEST", "PROFILE", "LOGOUT"
-            };
-        } else {
-            buttons = new String[]{
-                "DASHBOARD", "VIEW",
-                "EMERGENCY HOTLINE", "PROFILE", "SHARE", "LOGOUT"
-            };
-        }
+        buttons = new String[]{
+            "DASHBOARD", "VIEW",
+            "EMERGENCY HOTLINE", "PROFILE", "REQUEST", "LOGOUT"
+        };
 
         for (String btn : buttons) {
             JButton button = new JButton(btn);
@@ -77,7 +74,7 @@ public class ClimateAction {
 
             if (profile != null) {
                 profile.dispose();
-                profile= null;
+                profile = null;
             }
 
             switch (action) {
@@ -97,15 +94,18 @@ public class ClimateAction {
                         profile = new Profile(UserProfile, ClimateAction.this);
                     }
                     break;
-                case "USER REQUEST":
-                    break;
-                case "SHARE":
-                    new Share(ClimateAction.this);
+
+                case "REQUEST":
+
+                    if (share == null) {
+                        share = new Share(UserProfile.getisAdmin(),ClimateAction.this,UserProfile, emergencyList, resourceList);
+                    }
+                    share.setVisible(true);
                     break;
 
                 case "LOGOUT":
                     frame.setVisible(false);
-                    new LoginFrame(users,countryList);
+                    new LoginFrame(users, countryList, emergencyList, resourceList);
                     break;
 
             }
@@ -119,8 +119,10 @@ public class ClimateAction {
     public static void main(String[] args) {
         ArrayList<User> users = new ArrayList<>();
         ArrayList<Add> countryList = new ArrayList<>();
-        
-        new LoginFrame(users, countryList);
+        ArrayList<String> emergencyList = new ArrayList<>();
+        ArrayList<String> resourceList = new ArrayList<>();
+
+        new LoginFrame(users, countryList, emergencyList, resourceList);
 
     }
 

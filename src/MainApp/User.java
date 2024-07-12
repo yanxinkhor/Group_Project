@@ -61,8 +61,5 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    boolean isAdmin() {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
 
 }
